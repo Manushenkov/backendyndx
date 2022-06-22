@@ -1,11 +1,12 @@
 # backendyndx
 
-<!-- postgres:
-docker run --name postgres -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=postgres -d postgres -->
-
-app:
+build app image:
 docker build -t flaskapp:latest .
 
-<!-- docker run -p 0.0.0.0:80:80 flaskapp -->
+run containers with the app and database:
+docker-compose up -d
 
-На моей локальной макоси работает только psycopg2, но на удалённом линуксе только psycopg2-binary = "\*". :0
+My local machine (m1 macbook) only supports psycopg2, but the remote linux machine only accepts psycopg2-binary. so be aware of it if you want to test it on your machine if it's a macbook too because you might need to change this dependency
+
+for auto-restart upon system reboot i ran this script:
+https://techoverflow.net/2020/10/24/create-a-systemd-service-for-your-docker-compose-project-in-10-seconds/
