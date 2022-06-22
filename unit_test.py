@@ -328,7 +328,7 @@ def test_nodes():
 def test_sales_wrong_format():
     date = "2022-02-01T12:00:00.000Z"
     status, response = request(f"/sales/{date}", json_response=True)
-    assert status == 400, f"Expected HTTP status code 400, got {status}"
+    assert status == 404, f"Expected HTTP status code 404, got {status}"
     print("Test sales wrong format passed.")
 
 
