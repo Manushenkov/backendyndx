@@ -9,7 +9,8 @@ The app is packed into docker containers and is run via docker-compose
 
 # How to use it?
 
-How to start the service?
+## How to start the service?
+
 first build app image
 
 .. code-block:: shell
@@ -24,9 +25,9 @@ Then start the app and database containers using docker-compose
 
 # Development
 
-How to start development server?
+## How to start development server?
 
-## Change SQLALCHEMY_DATABASE_URI in app.config in app to your database's URL and run
+Change SQLALCHEMY_DATABASE_URI in app.config in app to your database's URL and run
 
 .. code-block:: shell
 
