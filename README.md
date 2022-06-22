@@ -37,6 +37,8 @@ Change SQLALCHEMY_DATABASE_URI in app.config in app to your database's URL and r
 
 ## How to run tests?
 
+I added a 6 new tests testing ivalid imports, id's, dates and url's
+
 .. code-block:: shell
 
     python3 unit_test.py
