@@ -334,7 +334,7 @@ def test_sales_wrong_format():
 
 def test_sales_invalid_date():
     invalidParams = urllib.parse.urlencode({
-        "date": "2022-02-04T00:00:00.000Z"
+        "date": "i am an invalid date"
     })
     status, response = request(f"/sales?{invalidParams}", json_response=True)
     assert status == 400, f"Expected HTTP status code 400, got {status}"
