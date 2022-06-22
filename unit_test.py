@@ -12,6 +12,69 @@ API_BASEURL = "http://127.0.0.1:80"
 # 127.0.0.1:5000
 ROOT_ID = "069cb8d7-bbdd-47d3-ad8f-82ef4c269df1"
 
+
+INVALID_IMPORT_BATCHES = [
+    {
+        "items": [
+            {
+                "type": "CATEGORY",
+                "name": 123321,
+                "id": "069cb8d7-bbdd-47d3-ad8f-82ef4c269df1",
+                "parentId": None
+            }
+        ],
+        "updateDate": "2022-02-01T12:00:00.000Z"
+    },
+    {
+        "items": [
+            {
+                "type": "OFFER",
+                "name": "Xomiа Readme 10",
+                "id": "b1d8fd7d-2ae3-47d5-b2f9-0f094af800d4",
+                "parentId": "d515e43f-f3f6-4471-bb77-6b455017a2d2",
+                "price": 59999
+            }
+        ],
+        "updateDate": "invalid date"
+    },
+    {
+        "items": [
+            {
+                "type": "OFFER",
+                "name": "Samson 70\" LED UHD Smart",
+                "id": "invalid ID",
+                "parentId": "1cc0129a-2bfe-474c-9ee6-d435bf5fc8f2",
+                "price": 32999
+            },
+        ],
+        "updateDate": "2022-02-03T12:00:00.000Z"
+    },
+    {
+        "items": [
+            {
+                "type": "WRONG TYPE",
+                "name": "Goldstar 65\" LED UHD LOL Very Smart",
+                "id": "73bc3b36-02d1-4245-ab35-3106c9ee1c65",
+                "parentId": "1cc0129a-2bfe-474c-9ee6-d435bf5fc8f2",
+                "price": 11
+            }
+        ],
+        "updateDate": "2022-02-03T15:00:00.000Z"
+    },
+    {
+        "items": [
+            {
+                "type": "OFFER",
+                "name": "Goldstar 65\" LED UHD LOL Very Smart",
+                "id": "73bc3b36-02d1-4245-ab35-3106c9ee1c65",
+                "parentId": "1cc0129a-2bfe-474c-9ee6-d435bf5fc8f2",
+                "price": -1
+            }
+        ],
+        "updateDate": "2022-02-03T15:00:00.000Z"
+    }
+]
+
 IMPORT_BATCHES = [
     {
         "items": [
@@ -211,6 +274,16 @@ def print_diff(expected, response):
                     "expected.json", "response.json"])
 
 
+def test_import_invalid_items():
+    for index, batch in enumerate(INVALID_IMPORT_BATCHES):
+        print(f"Importing invalid import batch {index}")
+        status, _ = request("/imports", method="POST", data=batch)
+
+        assert status == 400, f"Expected HTTP status code 400, got {status}"
+
+    print("Test import invalid items passed.")
+
+
 def test_import():
     for index, batch in enumerate(IMPORT_BATCHES):
         print(f"Importing batch {index}")
@@ -219,6 +292,21 @@ def test_import():
         assert status == 200, f"Expected HTTP status code 200, got {status}"
 
     print("Test import passed.")
+
+
+def test_nodes_wrong_format():
+    status, response = request(f"/nodes?id={ROOT_ID}", json_response=True)
+    assert status == 404, f"Expected HTTP status code 404, got {status}"
+
+    print("Test nodes wrong format passed.")
+
+
+def test_nodes_invalid_id():
+    BROKEN_ID = "iAmAnInvalidId"
+    status, response = request(f"/nodes/{BROKEN_ID}", json_response=True)
+    assert status == 400, f"Expected HTTP status code 400, got {status}"
+
+    print("Test nodes invalid id passed.")
 
 
 def test_nodes():
@@ -237,6 +325,22 @@ def test_nodes():
     print("Test nodes passed.")
 
 
+def test_sales_wrong_format():
+    date = "2022-02-01T12:00:00.000Z"
+    status, response = request(f"/sales/{date}", json_response=True)
+    assert status == 400, f"Expected HTTP status code 400, got {status}"
+    print("Test sales wrong format passed.")
+
+
+def test_sales_invalid_date():
+    invalidParams = urllib.parse.urlencode({
+        "date": "2022-02-04T00:00:00.000Z"
+    })
+    status, response = request(f"/sales?{invalidParams}", json_response=True)
+    assert status == 400, f"Expected HTTP status code 400, got {status}"
+    print("Test sales invalid date passed.")
+
+
 def test_sales():
     params = urllib.parse.urlencode({
         "date": "2022-02-04T00:00:00.000Z"
@@ -246,16 +350,13 @@ def test_sales():
     print("Test sales passed.")
 
 
-def test_stats():
-    params = urllib.parse.urlencode({
-        "dateStart": "2022-02-01T00:00:00.000Z",
-        "dateEnd": "2022-02-03T00:00:00.000Z"
-    })
-    status, response = request(
-        f"/node/{ROOT_ID}/statistic?{params}", json_response=True)
+def test_delete_invalid_id():
+    BROKEN_ID = "iAmAnInvalidId"
 
-    assert status == 200, f"Expected HTTP status code 200, got {status}"
-    print("Test stats passed.")
+    status, _ = request(f"/delete/{BROKEN_ID}", method="DELETE")
+    assert status == 400, f"Expected HTTP status code 400, got {status}"
+
+    print("Test delete invalid id passed.")
 
 
 def test_delete():
@@ -272,8 +373,13 @@ def test_all():
     test_import()
     test_nodes()
     test_sales()
-    # test_stats()
     test_delete()
+
+    test_delete_invalid_id()
+    test_nodes_wrong_format()
+    test_nodes_invalid_id()
+    test_sales_wrong_format()
+    test_sales_invalid_date()
 
 
 def main():
