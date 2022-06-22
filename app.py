@@ -13,8 +13,11 @@ from helpers.isValidUuid import isValidUuid
 from helpers.itemToJson import itemToJson
 
 app = Flask(__name__)
+# conn_url = 'postgresql+psycopg2://yourUserDBName:yourUserDBPassword@yourDBDockerContainerName/yourDBName'
 
-app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql://postgres:postgres@postgres:5432/postgres'
+# docker run --name postgres -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=postgres -d postgres
+
+app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql+psycopg2://postgres:postgres@localhost:5432/postgres'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
