@@ -380,6 +380,7 @@ def test_all():
     test_nodes_invalid_id()
     test_sales_wrong_format()
     test_sales_invalid_date()
+    test_import_invalid_items()
 
 
 def main():
