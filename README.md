@@ -1,6 +1,3 @@
-.. role:: shell(code)
-:language: shell
-
 Python api, enrollment task for yandex backend school
 
 # What's inside?
@@ -13,13 +10,11 @@ The app is packed into docker containers and is run via docker-compose
 
 first build app image
 
-.. code-block:: shell
 
     docker build -t flaskapp:latest .
 
 Then start the app and database containers using docker-compose
 
-.. code-block:: shell
 
     docker-compose up -d
 
@@ -29,7 +24,6 @@ Then start the app and database containers using docker-compose
 
 Change SQLALCHEMY_DATABASE_URI in app.config in app to your database's URL and run
 
-.. code-block:: shell
 
     pipenv install
     pipenv shell
@@ -39,7 +33,6 @@ Change SQLALCHEMY_DATABASE_URI in app.config in app to your database's URL and r
 
 I added a 6 new tests testing ivalid imports, id's, dates and url's
 
-.. code-block:: shell
 
     python3 unit_test.py
 
